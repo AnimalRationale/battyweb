@@ -34,6 +34,19 @@
     margin:0 auto;
 }
 
+.battery-card-square.mdl-card {
+    width: 240px;
+    height: 240px;
+    padding-left: 30px;
+    margin-left: 125px;
+    margin-top: 15px;
+    margin-bottom: 25px;
+}
+
+.battery-card-square > .mdl-card__title {
+    color: #fff;
+}
+
 .mdl-layout__header-row span {
     margin-left: 15px;
     margin-top: 17px;
@@ -51,88 +64,7 @@
     padding: 0;
     margin: 0 auto;
 }
-.mdl-card__supporting-text {
-    width: auto;
-    height: 100%;
-    padding-top: 0;
-}
-#messages {
-    overflow-y: auto;
-    margin-bottom: 10px;
-    height: calc(100% - 90px);
-    flex: 1 1 auto;
-    flex-direction: column;
-    display: flex;
-}
-#message-filler {
-    flex-grow: 1;
-}
-.message-container:first-of-type {
-    border-top-width: 0;
-}
-.message-container {
-    display: block;
-    margin-top: 10px;
-    border-top: 1px solid #f3f3f3;
-    padding-top: 10px;
-    opacity: 0;
-    transition: opacity 1s ease-in-out;
-}
-.message-container.visible {
-    opacity: 1;
-}
-.message-container .pic {
-    background-image: url('/images/profile_placeholder.png');
-    background-repeat: no-repeat;
-    width: 30px;
-    height: 30px;
-    background-size: 30px;
-    border-radius: 20px;
-}
-.message-container .spacing {
-    display: table-cell;
-    vertical-align: top;
-}
-.message-container .message {
-    display: table-cell;
-    width: calc(100% - 40px);
-    padding: 5px 0 5px 10px;
-}
-.message-container .name {
-    display: inline-block;
-    width: 100%;
-    padding-left: 40px;
-    color: #bbb;
-    font-style: italic;
-    font-size: 12px;
-    box-sizing: border-box;
-}
-#message-form {
-    display: flex;
-    flex-direction: row;
-    width: calc(100% - 48px);
-    float: left;
-}
-#image-form {
-    display: flex;
-    flex-direction: row;
-    width: 48px;
-    float: right;
-}
-#message-form .mdl-textfield {
-    width: calc(100% - 100px);
-}
-#message-form button, #image-form button {
-    width: 100px;
-    margin: 15px 0 0 10px;
-}
-.mdl-card {
-    min-height: 0;
-}
-.mdl-card {
-    background: linear-gradient(white, #f9f9f9);
-    justify-content: space-between;
-}
+
 #user-container {
     position: absolute;
     display: flex;
@@ -161,18 +93,7 @@
     padding-right: 10px;
     padding-left: 20px;
 }
-#image-form #submitImage {
-    width: auto;
-    padding: 0 6px 0 1px;
-    min-width: 0;
-}
-#image-form #submitImage .material-icons {
-    top: -1px;
-}
-.message img {
-    max-width: 300px;
-    max-height: 200px;
-}
+
 #mediaCapture {
     display: none;
 }

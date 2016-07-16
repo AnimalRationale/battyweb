@@ -119,7 +119,9 @@
                                     $('#' + container).empty();
                                     console.log("Container " + container + " exists.");
                                 } else {
-                                    $('body').append('<div id="' + container + '" class="progress-bar-container"></div>');
+                                    $('body').append(
+                                                '<div class="battery-card-square mdl-card mdl-shadow--2dp"><div id="' + container + '" class="progress-bar-container"></div></div>'
+                                    );
                                 }
                                 drawBatteryLevelIndicator(container, deviceData.batteryLevel);
                                 console.log("Status: " + getChargingStatus(deviceData.batteryChargingStatus) + " / " + deviceData.batteryChargingStatus );
