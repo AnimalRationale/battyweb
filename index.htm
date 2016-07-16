@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>WebRoySec</title>
+    <meta name="author" content="AnimalR">
+    <!-- Material Design Lite -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.orange-indigo.min.css">
+    <script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase.js"></script>
+    <script src="js/progressbar.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
+</head>
+
+<body>
+<!-- Header with sign out button -->
+<header class="mdl-layout__header mdl-color-text--white mdl-color--light-blue-700">
+    <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-grid">
+        <div class="mdl-layout__header-row mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop">
+            <h3><i class="material-icons">battery_unknown</i> WebRoy </h3>
+        </div>
+        <div id="user-container">
+            <div hidden id="user-pic"></div>
+            <div hidden id="user-name"></div>
+            <button hidden id="sign-out" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
+                Sign-out
+            </button>
+            <button hidden id="sign-in" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
+                <i class="material-icons">account_circle</i>Sign-in with Google
+            </button>
+        </div>
+    </div>
+</header>
+    <script>
+
+        function drawBatteryLevelIndicator(container, batteryLevel) {
+            var bar = new ProgressBar.Circle(eval(container), {
+                color: '#FF8800',
+                // This has to be the same size as the maximum width to
+                // prevent clipping
+                strokeWidth: 4,
+                trailWidth: 4,
+                easing: 'easeInOut',
+                duration: 1600,
+                text: {
+                    autoStyleContainer: false
+                },
+                from: { color: '#FF3388', width: 4 },
+                to: { color: '#0050FF', width: 4 },
+                // Set default step function for all animate calls
+                step: function(state, circle) {
+                    circle.path.setAttribute('stroke', state.color);
+                    circle.path.setAttribute('stroke-width', state.width);
+                    var value = Math.round(circle.value() * 100);
+                    if (value === 0) {
+                        circle.setText('');
+                    } else {
+                        circle.setText(value + '%');
+                    }
+                }
+            });
+            bar.text.style.fontFamily = 'Helvetica, Arial, sans-serif';
+            bar.text.style.fontSize = '1.5rem';
+            bar.animate(batteryLevel / 100);  // Number from 0.0 to 1.0
+        }
+
+        function getChargingStatus(status) {
+            if (status === 1) {
+                return 'Charging';
+            } else return 'Discharging';
+        }
+
+        function getTimeOfCheck(time) {
+            timeNow = (new Date).getTime();
+            if (time > timeNow || time <= 0) return 'Error';
+            timeOfCheck = timeNow - time;
+
+            const SECOND_IN_MILLIS = 1000;
+            const MINUTE_IN_MILLIS = 60 * SECOND_IN_MILLIS;
+            const HOUR_IN_MILLIS = 60 * MINUTE_IN_MILLIS;
+            const DAY_IN_MILLIS = 24 * HOUR_IN_MILLIS;
+
+            if (timeOfCheck < MINUTE_IN_MILLIS)
+                timeOfCheckText = 'Checked now';
+            else if (timeOfCheck < 60 * MINUTE_IN_MILLIS)
+                timeOfCheckText = Math.round(timeOfCheck / MINUTE_IN_MILLIS) + 'min ago';
+             else if (timeOfCheck < 24 * HOUR_IN_MILLIS)
+                timeOfCheckText = Math.round(timeOfCheck / HOUR_IN_MILLIS) + 'h ago';
+             else if (timeOfCheck < 48 * HOUR_IN_MILLIS)
+                timeOfCheckText = 'Yesterday';
+            else
+                timeOfCheckText = Math.round(timeOfCheck / DAY_IN_MILLIS + 'days ago');
+
+            return timeOfCheckText;
+        }
+
+        function showBatteries() {
+            var user = firebase.auth().currentUser;
+            if (user != null) {
+                var ref = firebase.database().ref(user.uid + '/devices');
+                console.log("Firebase devices reference: " + ref);
+                ref.on("value", function(snapshot) {
+                            console.log(snapshot.val());
+                            // Read data for every device object
+                            snapshot.forEach(function(childSnapshot) {
+                                var deviceID = childSnapshot.key;
+                                console.log("Device ID: " + deviceID);
+                                // childData contains battery data
+                                var deviceData = childSnapshot.val();
+                                console.log("Device name: " + deviceData.batteryDeviceCustomName)
+                                console.log("Battery Level: " + deviceData.batteryLevel);
+                                // Adding letter to div ID - Progressbar.js can't recognize elements IDs starting with numerals
+                                // (valid in HTML, not valid in CSS syntax)
+                                container = 'd' + deviceID;
+                                console.log("Container: " + container);
+                                if ($('#' + container).length) {
+                                    $('#' + container).empty();
+                                    console.log("Container " + container + " exists.");
+                                } else {
+                                    $('body').append('<div id="' + container + '" class="progress-bar-container"></div>');
+                                }
+                                drawBatteryLevelIndicator(container, deviceData.batteryLevel);
+                                console.log("Status: " + getChargingStatus(deviceData.batteryChargingStatus) + " / " + deviceData.batteryChargingStatus );
+                                $('#' + container).append('<span id="device-name-' + container + '" class="device-name" style="display: none;">'
+                                + deviceData.batteryDeviceCustomName + '</span>');
+                                $('#' + container).append('<span id="charging-status-' + container + '" class="charging-status" style="display: none;">'
+                                + getChargingStatus(deviceData.batteryChargingStatus) + '</span>');
+                                $('#' + container).append('<span id="time-of-check-' + container + '" class="time-of-check" style="display: none;">'
+                                + getTimeOfCheck(deviceData.batteryCheckTime) + '</span>');
+                                $('#device-name-' + container).fadeIn(1200);
+                                $('#charging-status-' + container).fadeIn(1600);
+                                $('#time-of-check-' + container).fadeIn(1600);
+                            });
+                        },
+                        function (errorObject) {
+                            console.log("The read failed: " + errorObject.code + " User: " + user.uid);
+                        }
+                );
+            } else {
+                console.log("Not logged in.");
+            }
+        }
+
+        function signIn() {
+            console.log("SignIn triggered.");
+            var provider = new firebase.auth.GoogleAuthProvider();
+            firebase.auth().signInWithPopup(provider).then(function(result) {
+                // This gives you a Google Access Token. You can use it to access the Google API.
+                var token = result.credential.accessToken;
+                // The signed-in user info.
+                var user = result.user;
+                console.log("Logged user: " + user.uid);
+            }).catch(function(error) {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                // The email of the user's account used.
+                var email = error.email;
+                // The firebase.auth.AuthCredential type that was used.
+                var credential = error.credential;
+                // ...
+                console.log("Errors: " + errorCode + " " + errorMessage);
+            });
+        }
+
+        function signOut () {
+            // Sign out of Firebase.
+            console.log("SignOut triggered.")
+            firebase.auth().signOut();
+        }
+
+        // Initialize Firebase
+        var userPic = document.getElementById('user-pic');
+        var userName = document.getElementById('user-name');
+        var signInButton = document.getElementById('sign-in');
+        var signOutButton = document.getElementById('sign-out');
+        var config = {
+            apiKey: "AIzaSyAYty_3eT40IWsFg7Q6JVUeg656WPPp0hs",
+            authDomain: "orbison.firebaseapp.com",
+            databaseURL: "https://orbison.firebaseio.com",
+            storageBucket: "project-6496933351702729619.appspot.com",
+        };
+        var configSec = {
+            apiKey: "AIzaSyC2-d8dRFAK-zCV5CW2W_dysn927Bvbi_E",
+            authDomain: "project-3964214613460187316.firebaseapp.com",
+            databaseURL: "https://project-3964214613460187316.firebaseio.com",
+            storageBucket: "",
+        };
+        firebase.initializeApp(config);
+        signOutButton.addEventListener('click', signOut);
+        signInButton.addEventListener('click', signIn);
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                console.log("Listener logged user: " + user.uid);
+                showBatteries();
+                // Get profile pic and user's name from the Firebase user object.
+                var profilePicUrl = user.photoURL;
+                var userNameText = user.displayName;
+                // Set the user's profile pic and name.
+                userPic.style.backgroundImage = 'url(' + (profilePicUrl || '/images/profile_placeholder.png') + ')';
+                userName.textContent = userNameText;
+                userName.removeAttribute('hidden');
+                userPic.removeAttribute('hidden');
+                signOutButton.removeAttribute('hidden');
+                // Hide sign-in button.
+                signInButton.setAttribute('hidden', 'true');
+            } else {
+                userName.setAttribute('hidden', 'true');
+                userPic.setAttribute('hidden', 'true');
+                signOutButton.setAttribute('hidden', 'true');
+                // Show sign-in button.
+                signInButton.removeAttribute('hidden');
+                console.log("User not logged in.");
+            }
+        });
+
+    </script>
+</body>
+</html>
