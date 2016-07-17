@@ -127,7 +127,7 @@
                                             '</h4>' +
                                         '</div>' +
                                         '<div class="mdl-card__actions mdl-card--border">' +
-                                                'Placeholder' +
+                                                '<span id="device-name-text-' + container + '"></span>' +
                                         '<div class="mdl-layout-spacer"></div>' +
                                             '<i class="material-icons">battery_unknown</i>' +
                                         '</div>' +
@@ -136,8 +136,7 @@
                                 }
                                 drawBatteryLevelIndicator(container, deviceData.batteryLevel);
                                 console.log("Status: " + getChargingStatus(deviceData.batteryChargingStatus) + " / " + deviceData.batteryChargingStatus );
-                                $('#' + container).append('<span id="device-name-' + container + '" class="device-name" style="display: none;">'
-                                + deviceData.batteryDeviceCustomName + '</span>');
+                                $('#device-name-text-' + container).text(deviceData.batteryDeviceCustomName);
                                 $('#' + container).append('<span id="charging-status-' + container + '" class="charging-status" style="display: none;">'
                                 + getChargingStatus(deviceData.batteryChargingStatus) + '</span>');
                                 $('#' + container).append('<span id="time-of-check-' + container + '" class="time-of-check" style="display: none;">'
