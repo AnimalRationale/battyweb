@@ -120,7 +120,18 @@
                                     console.log("Container " + container + " exists.");
                                 } else {
                                     $('body').append(
-                                                '<div class="battery-card-square mdl-card mdl-shadow--2dp"><div id="' + container + '" class="progress-bar-container"></div></div>'
+                                    '<div class="battery-card-status mdl-card mdl-shadow--2dp">' +
+                                        '<div class="mdl-card__title mdl-card--expand">' +
+                                            '<h4>' +
+                                                '<div id="' + container + '" class="progress-bar-container"></div>' +
+                                            '</h4>' +
+                                        '</div>' +
+                                        '<div class="mdl-card__actions mdl-card--border">' +
+                                                'Placeholder' +
+                                        '<div class="mdl-layout-spacer"></div>' +
+                                            '<i class="material-icons">battery_unknown</i>' +
+                                        '</div>' +
+                                    '</div>'
                                     );
                                 }
                                 drawBatteryLevelIndicator(container, deviceData.batteryLevel);

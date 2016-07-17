@@ -34,17 +34,37 @@
     margin:0 auto;
 }
 
-.battery-card-square.mdl-card {
-    width: 240px;
-    height: 240px;
-    padding-left: 30px;
-    margin-left: 125px;
+.battery-card-status.mdl-card {
+    width: 256px;
+    height: 256px;
     margin-top: 15px;
     margin-bottom: 25px;
+    margin-left: 20px;
+    background: #f8f8e8;
 }
-
-.battery-card-square > .mdl-card__title {
-    color: #fff;
+.battery-card-status > .mdl-card__actions {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+.battery-card-status > .mdl-card__title {
+    align-items: flex-start;
+    margin-left: 22px;
+}
+.battery-card-status > .mdl-card__title > h4 {
+    margin-top: 0;    
+}
+.battery-card-status > .mdl-card__actions {
+    display: flex;
+    box-sizing:border-box;
+    align-items: center;
+}
+.battery-card-status > .mdl-card__actions > .material-icons {
+    padding-right: 10px;
+    padding-bottom: 15px;
+}
+.battery-card-status > .mdl-card__title,
+.battery-card-status > .mdl-card__actions,
+.battery-card-status > .mdl-card__actions > .mdl-button {
+    color: #0e0e0e;
 }
 
 .mdl-layout__header-row span {
