@@ -1,6 +1,5 @@
 .progress-bar-container {
     margin: 40px;
-    margin-bottom: 90px;
     width: 100px;
     height: 100px;
     position: relative;
@@ -64,7 +63,7 @@
 .battery-card-status > .mdl-card__title,
 .battery-card-status > .mdl-card__actions,
 .battery-card-status > .mdl-card__actions > .mdl-button {
-    color: #0e0e0e;
+    color: #555;
 }
 
 .mdl-layout__header-row span {
