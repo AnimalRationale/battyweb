@@ -5,25 +5,6 @@
     position: relative;
 }
 
-.device-name {
-    font-family: Arial, Helvetica;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: dimgrey;
-    display:table;
-    margin:0 auto;
-    margin-top: 4px;
-}
-
-.charging-status {
-    font-family: Arial, Helvetica;
-    font-size: 0.6rem;
-    font-weight: 600;
-    color: darkgrey;
-    display:table;
-    margin:0 auto;
-}
-
 .time-of-check {
     font-family: Arial, Helvetica;
     font-size: 0.6rem;
@@ -59,7 +40,10 @@
 .battery-card-status > .mdl-card__actions > .material-icons {
     padding-right: 10px;
     padding-bottom: 15px;
+    font-size: 24px;
+    color: #C0C0C0;
 }
+
 .battery-card-status > .mdl-card__title,
 .battery-card-status > .mdl-card__actions,
 .battery-card-status > .mdl-card__actions > .mdl-button {
@@ -70,15 +54,18 @@
     margin-left: 15px;
     margin-top: 17px;
 }
+
 .mdl-grid {
     max-width: 1024px;
     margin: auto;
 }
+
 .material-icons {
     font-size: 36px;
     top: 8px;
     position: relative;
 }
+
 .mdl-layout__header-row {
     padding: 0;
     margin: 0 auto;
