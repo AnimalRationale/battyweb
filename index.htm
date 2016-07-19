@@ -34,7 +34,8 @@
     </div>
 </header>
     <script>
-
+        var statusIconOnColor = '#00796B';
+        var statusIconOffColor = '#E0E0E0';
         function drawBatteryLevelIndicator(container, batteryLevel) {
             var bar = new ProgressBar.Circle(eval(container), {
                 color: '#FF8800',
@@ -66,10 +67,34 @@
             bar.animate(batteryLevel / 100);  // Number from 0.0 to 1.0
         }
 
+        function getPlugInStatusPowerColor(status) {
+            if (status === 1) {
+                return statusIconOnColor;
+            } else return statusIconOffColor;
+        }
+
+        function getPlugInStatusUSBColor(status) {
+            if (status === 2) {
+                return statusIconOnColor;
+            } else return statusIconOffColor;
+        }
+
+        function getPlugInStatusWirelessColor(status) {
+            if (status === 3) {
+                return statusIconOnColor;
+            } else return statusIconOffColor;
+        }
+
         function getChargingStatus(status) {
             if (status === 1) {
                 return 'battery_charging_full';
-            } else return 'battery_unknown';
+            } else return 'battery_std';
+        }
+
+        function getChargingStatusColor(status) {
+            if (status === 1) {
+                return statusIconOnColor;
+            } else return statusIconOffColor;
         }
 
         function getTimeOfCheck(time) {
@@ -130,11 +155,11 @@
                                                 '<span id="device-name-text-' + container + '" style="display: none;"></span>' +
                                             '<div class="mdl-layout-spacer"></div>' +
                                             '<i id="plug-in-status-power-' + container +
-                                            '" style="display: visible;" class="material-icons">power</i>' +
+                                            '" style="display: none;" class="material-icons">power</i>' +
                                             '<i id="plug-in-status-usb-' + container +
-                                            '" style="display: visible;" class="material-icons">usb</i>' +
-                                            '<i id="plug-in-status-nfc-' + container +
-                                            '" style="display: visible;" class="material-icons">nfc</i>' +
+                                            '" style="display: none;" class="material-icons">usb</i>' +
+                                            '<i id="plug-in-status-wireless-' + container +
+                                            '" style="display: none;" class="material-icons">nfc</i>' +
                                             '<i id="charging-status-' + container +
                                             '" style="display: none;" class="material-icons">battery_unknown</i>' +
                                         '</div>' +
@@ -147,13 +172,18 @@
                                 drawBatteryLevelIndicator(container, deviceData.batteryLevel);
                                 console.log("Status: " + getChargingStatus(deviceData.batteryChargingStatus) + " / " + deviceData.batteryChargingStatus );
                                 $('#device-name-text-' + container).text(deviceData.batteryDeviceCustomName);
+                                $('#plug-in-status-power-' + container).css('color', getPlugInStatusPowerColor(deviceData.batteryPluggedStatus));
+                                $('#plug-in-status-usb-' + container).css('color', getPlugInStatusUSBColor(deviceData.batteryPluggedStatus));
+                                $('#plug-in-status-wireless-' + container).css('color', getPlugInStatusWirelessColor(deviceData.batteryPluggedStatus));
                                 $('#charging-status-' + container).text(getChargingStatus(deviceData.batteryChargingStatus));
-//                                $('#' + container).append('<span id="charging-status-' + container + '" class="charging-status" style="display: none;">'
-//                                + getChargingStatus(deviceData.batteryChargingStatus) + '</span>');
+                                $('#charging-status-' + container).css('color', getChargingStatusColor(deviceData.batteryChargingStatus));
                                 $('#' + container).append('<span id="time-of-check-' + container + '" class="time-of-check" style="display: none;">'
                                 + getTimeOfCheck(deviceData.batteryCheckTime) + '</span>');
                                 $('#device-name-text-' + container).fadeIn(1200);
-                                $('#charging-status-' + container).fadeIn(1800);
+                                $('#plug-in-status-power-' + container).fadeIn(1000);
+                                $('#plug-in-status-usb-' + container).fadeIn(1500);
+                                $('#plug-in-status-wireless-' + container).fadeIn(2000);
+                                $('#charging-status-' + container).fadeIn(2500);
                                 $('#time-of-check-' + container).fadeIn(1600);
                             });
                         },
