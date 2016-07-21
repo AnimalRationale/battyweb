@@ -192,13 +192,15 @@
                                     $('#' + container).append('<span id="time-of-check-' + container + '" class="time-of-check" style="display: none;">'
                                     + getTimeOfCheck(deviceData.batteryCheckTime) + '</span>');
                                 }
-
+                                $('#' + container).append('<span id="device-model-' + container + '" class="time-of-check" style="display: none; color: #D32F2F">'
+                                + deviceData.batteryDeviceName + '</span>');
                                 $('#device-name-text-' + container).fadeIn(1200);
                                 $('#plug-in-status-power-' + container).fadeIn(1000);
                                 $('#plug-in-status-usb-' + container).fadeIn(1500);
                                 $('#plug-in-status-wireless-' + container).fadeIn(2000);
                                 $('#charging-status-' + container).fadeIn(2500);
                                 $('#time-of-check-' + container).fadeIn(1600);
+                                $('#device-model-' + container).fadeIn(1600);
                             });
                         },
                         function (errorObject) {
