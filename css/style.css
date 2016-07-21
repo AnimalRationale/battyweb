@@ -14,6 +14,15 @@
     margin:0 auto;
 }
 
+.device-model-info {
+    font-family: Arial, Helvetica;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: darkturquoise;
+    display:table;
+    margin:0 auto;
+}
+
 .battery-card-status.mdl-card {
     width: 256px;
     height: 256px;
