@@ -17,8 +17,8 @@
 .device-model-info {
     font-family: Arial, Helvetica;
     font-size: 0.8rem;
-    font-weight: 700;
-    color: darkturquoise;
+    font-weight: 400;
+    color: cornflowerblue;
     display:table;
     margin:0 auto;
 }
