@@ -134,6 +134,7 @@
         }
 
         function showBatteryCard(container) {
+            if (!$('#' + container).length) {
             $('#cards').append(
                     '<div class="mdl-cell mdl-cell--4-col">' +
                         '<div class="battery-card-status mdl-card mdl-shadow--2dp" onmouseover="showDeviceModel(this)" onmouseout="hideDeviceModel(this)">' +
@@ -282,13 +283,7 @@
             apiKey: "AIzaSyAYty_3eT40IWsFg7Q6JVUeg656WPPp0hs",
             authDomain: "orbison.firebaseapp.com",
             databaseURL: "https://orbison.firebaseio.com",
-            storageBucket: "project-6496933351702729619.appspot.com",
-        };
-        var configSec = {
-            apiKey: "AIzaSyC2-d8dRFAK-zCV5CW2W_dysn927Bvbi_E",
-            authDomain: "project-3964214613460187316.firebaseapp.com",
-            databaseURL: "https://project-3964214613460187316.firebaseio.com",
-            storageBucket: "",
+            storageBucket: "project-6496933351702729619.appspot.com"
         };
         firebase.initializeApp(config);
         signOutButton.addEventListener('click', signOut);
