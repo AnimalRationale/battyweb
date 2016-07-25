@@ -133,31 +133,62 @@
             $(card).find('.device-model-info').css('display', 'none');
         }
 
-        function showBatteryCard(container) {
-            $('#cards').append(
-                    '<div class="mdl-cell mdl-cell--4-col">' +
+        function showBatteryCard(container, deviceData) {
+            if ($('#' + container).length) {
+                $('#' + container).empty();
+                console.log("Container " + container + " exists.");
+            } else {
+                $('#cards').append(
+                        '<div class="mdl-cell mdl-cell--4-col">' +
                         '<div class="battery-card-status mdl-card mdl-shadow--2dp" onmouseover="showDeviceModel(this)" onmouseout="hideDeviceModel(this)">' +
-                            '<div class="mdl-card__title mdl-card--expand">' +
-                                '<h4>' +
-                                    '<div id="' + container + '" class="progress-bar-container"></div>' +
-                                '</h4>' +
-                            '</div>' +
-                            '<div class="mdl-card__actions mdl-card--border">' +
-                                '<span id="device-name-text-' + container + '" style="display: none;"></span>' +
-                                '<div class="mdl-layout-spacer"></div>' +
-                                '<i id="plug-in-status-power-' + container +
-                                '" style="display: none;" class="material-icons">power</i>' +
-                                '<i id="plug-in-status-usb-' + container +
-                                '" style="display: none;" class="material-icons">usb</i>' +
-                                '<i id="plug-in-status-wireless-' + container +
-                                '" style="display: none;" class="material-icons">nfc</i>' +
-                                '<i id="charging-status-' + container +
-                                '" style="display: none;" class="material-icons">battery_unknown</i>' +
-                            '</div>' +
-                            '<div class="mdl-layout-spacer"></div>' +
+                        '<div class="mdl-card__title mdl-card--expand">' +
+                        '<h4>' +
+                        '<div id="' + container + '" class="progress-bar-container"></div>' +
+                        '</h4>' +
                         '</div>' +
-                    '</div>'
-            );
+                        '<div class="mdl-card__actions mdl-card--border">' +
+                        '<span id="device-name-text-' + container + '" style="display: none;"></span>' +
+                        '<div class="mdl-layout-spacer"></div>' +
+                        '<i id="plug-in-status-power-' + container +
+                        '" style="display: none;" class="material-icons">power</i>' +
+                        '<i id="plug-in-status-usb-' + container +
+                        '" style="display: none;" class="material-icons">usb</i>' +
+                        '<i id="plug-in-status-wireless-' + container +
+                        '" style="display: none;" class="material-icons">nfc</i>' +
+                        '<i id="charging-status-' + container +
+                        '" style="display: none;" class="material-icons">battery_unknown</i>' +
+                        '</div>' +
+                        '<div class="mdl-layout-spacer"></div>' +
+                        '</div>' +
+                        '</div>'
+                );
+            }
+                if (getTimeOfCheck(deviceData.batteryCheckTime) == deviceOfflineMsg) {
+                    drawBatteryLevelIndicator(container, 0);
+                    $('#device-name-text-' + container).text(deviceData.batteryDeviceCustomName);
+                    $('#' + container).append('<span id="time-of-check-' + container + '" class="time-of-check" style="display: none; color: #D32F2F">'
+                    + getTimeOfCheck(deviceData.batteryCheckTime) + '</span>');
+                    console.log("Device offline.");
+                } else {
+                    drawBatteryLevelIndicator(container, deviceData.batteryLevel);
+                    console.log("Status: " + getChargingStatus(deviceData.batteryChargingStatus) + " / " + deviceData.batteryChargingStatus);
+                    $('#device-name-text-' + container).text(deviceData.batteryDeviceCustomName);
+                    $('#plug-in-status-power-' + container).css('color', getPlugInStatusPowerColor(deviceData.batteryPluggedStatus));
+                    $('#plug-in-status-usb-' + container).css('color', getPlugInStatusUSBColor(deviceData.batteryPluggedStatus));
+                    $('#plug-in-status-wireless-' + container).css('color', getPlugInStatusWirelessColor(deviceData.batteryPluggedStatus));
+                    $('#charging-status-' + container).text(getChargingStatus(deviceData.batteryChargingStatus));
+                    $('#charging-status-' + container).css('color', getChargingStatusColor(deviceData.batteryChargingStatus));
+                    $('#' + container).append('<span id="time-of-check-' + container + '" class="time-of-check" style="display: none;">'
+                    + getTimeOfCheck(deviceData.batteryCheckTime) + '</span>');
+                }
+                $('#' + container).append('<span id="device-model-' + container + '" class="device-model-info" style="display: none;">'
+                + deviceData.batteryDeviceName + '</span>');
+                $('#device-name-text-' + container).fadeIn(1200);
+                $('#plug-in-status-power-' + container).fadeIn(1000);
+                $('#plug-in-status-usb-' + container).fadeIn(1500);
+                $('#plug-in-status-wireless-' + container).fadeIn(2000);
+                $('#charging-status-' + container).fadeIn(2500);
+                $('#time-of-check-' + container).fadeIn(1600);
         }
 
         function showBatteries() {
@@ -179,61 +210,7 @@
                                 // (valid in HTML, not valid in CSS syntax)
                                 container = 'd' + deviceID;
                                 console.log("Container: " + container);
-                                if ($('#' + container).length) {
-                                    $('#' + container).empty();
-                                    console.log("Container " + container + " exists.");
-                                } else {
-                                    $('#cards').append(
-                                        '<div class="mdl-cell mdl-cell--4-col">' +
-                                            '<div class="battery-card-status mdl-card mdl-shadow--2dp" onmouseover="showDeviceModel(this)" onmouseout="hideDeviceModel(this)">' +
-                                                '<div class="mdl-card__title mdl-card--expand">' +
-                                                    '<h4>' +
-                                                        '<div id="' + container + '" class="progress-bar-container"></div>' +
-                                                    '</h4>' +
-                                                '</div>' +
-                                                '<div class="mdl-card__actions mdl-card--border">' +
-                                                        '<span id="device-name-text-' + container + '" style="display: none;"></span>' +
-                                                    '<div class="mdl-layout-spacer"></div>' +
-                                                    '<i id="plug-in-status-power-' + container +
-                                                    '" style="display: none;" class="material-icons">power</i>' +
-                                                    '<i id="plug-in-status-usb-' + container +
-                                                    '" style="display: none;" class="material-icons">usb</i>' +
-                                                    '<i id="plug-in-status-wireless-' + container +
-                                                    '" style="display: none;" class="material-icons">nfc</i>' +
-                                                    '<i id="charging-status-' + container +
-                                                    '" style="display: none;" class="material-icons">battery_unknown</i>' +
-                                                '</div>' +
-                                                '<div class="mdl-layout-spacer"></div>' +
-                                            '</div>' +
-                                        '</div>'
-                                    );
-                                }
-                                if (getTimeOfCheck(deviceData.batteryCheckTime) == deviceOfflineMsg) {
-                                    drawBatteryLevelIndicator(container, 0);
-                                    $('#device-name-text-' + container).text(deviceData.batteryDeviceCustomName);
-                                    $('#' + container).append('<span id="time-of-check-' + container + '" class="time-of-check" style="display: none; color: #D32F2F">'
-                                    + getTimeOfCheck(deviceData.batteryCheckTime) + '</span>');
-                                } else {
-                                    drawBatteryLevelIndicator(container, deviceData.batteryLevel);
-                                    console.log("Status: " + getChargingStatus(deviceData.batteryChargingStatus) + " / " + deviceData.batteryChargingStatus);
-                                    $('#device-name-text-' + container).text(deviceData.batteryDeviceCustomName);
-                                    $('#plug-in-status-power-' + container).css('color', getPlugInStatusPowerColor(deviceData.batteryPluggedStatus));
-                                    $('#plug-in-status-usb-' + container).css('color', getPlugInStatusUSBColor(deviceData.batteryPluggedStatus));
-                                    $('#plug-in-status-wireless-' + container).css('color', getPlugInStatusWirelessColor(deviceData.batteryPluggedStatus));
-                                    $('#charging-status-' + container).text(getChargingStatus(deviceData.batteryChargingStatus));
-                                    $('#charging-status-' + container).css('color', getChargingStatusColor(deviceData.batteryChargingStatus));
-                                    $('#' + container).append('<span id="time-of-check-' + container + '" class="time-of-check" style="display: none;">'
-                                    + getTimeOfCheck(deviceData.batteryCheckTime) + '</span>');
-                                }
-                                $('#' + container).append('<span id="device-model-' + container + '" class="device-model-info" style="display: none;">'
-                                + deviceData.batteryDeviceName + '</span>');
-                                $('#device-name-text-' + container).fadeIn(1200);
-                                $('#plug-in-status-power-' + container).fadeIn(1000);
-                                $('#plug-in-status-usb-' + container).fadeIn(1500);
-                                $('#plug-in-status-wireless-' + container).fadeIn(2000);
-                                $('#charging-status-' + container).fadeIn(2500);
-                                $('#time-of-check-' + container).fadeIn(1600);
-                                //$('#device-model-' + container).fadeIn(1600);
+                                showBatteryCard(container, deviceData);
                             });
                         },
                         function (errorObject) {
