@@ -134,13 +134,13 @@
         }
 
         function showBatteryCard(container, deviceData) {
-            if ($('#' + container).length) {
+            if ($('#card-' + container).length) {
                 $('#' + container).empty();
-                console.log("Container " + container + " exists.");
+                console.log("Container card " + container + " exists.");
             } else {
                 $('#cards').append(
                         '<div class="mdl-cell mdl-cell--4-col">' +
-                            '<div class="battery-card-status mdl-card mdl-shadow--2dp" onmouseover="showDeviceModel(this)" onmouseout="hideDeviceModel(this)">' +
+                            '<div id="card-' + container + '" class="battery-card-status mdl-card mdl-shadow--2dp" onmouseover="showDeviceModel(this)" onmouseout="hideDeviceModel(this)">' +
                                 '<div class="mdl-card__title mdl-card--expand">' +
                                     '<h4>' +
                                         '<div id="' + container + '" class="progress-bar-container"></div>' +
