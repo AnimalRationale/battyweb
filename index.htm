@@ -196,7 +196,7 @@
             if (user != null) {
                 var ref = firebase.database().ref(user.uid + '/devices');
                 console.log("Firebase devices reference: " + ref);
-                ref.on("value", function(snapshot) {
+                ref.once("value", function(snapshot) {
                             console.log(snapshot.val());
                             // Read data for every device object
                             snapshot.forEach(function(childSnapshot) {
@@ -217,6 +217,19 @@
                             console.log("The read failed: " + errorObject.code + " User: " + user.uid);
                         }
                 );
+                ref.on('child_changed', function(childSnapshot) {
+                    var deviceID = childSnapshot.key;
+                    console.log("Device ID: " + deviceID);
+                    // childData contains battery data
+                    var deviceData = childSnapshot.val();
+                    console.log("Device name: " + deviceData.batteryDeviceCustomName)
+                    console.log("Battery Level: " + deviceData.batteryLevel);
+                    // Adding letter to div ID - Progressbar.js can't recognize elements IDs starting with numerals
+                    // (valid in HTML, not valid in CSS syntax)
+                    container = 'd' + deviceID;
+                    console.log("Container: " + container);
+                    showBatteryCard(container, deviceData);
+                });
             } else {
                 console.log("Not logged in.");
             }
