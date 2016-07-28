@@ -133,7 +133,10 @@
             $(card).find('.device-model-info').css('display', 'none');
         }
 
-        function showBatteryCard(container, deviceData) {
+        function showBatteryCard(deviceData) {
+            // Adding letter to div ID - Progressbar.js can't recognize elements IDs starting with numerals
+            // (valid in HTML, not valid in CSS syntax)
+            var container = 'd' + deviceData.batteryDeviceId;
             if ($('#card-' + container).length) {
                 $('#' + container).empty();
                 console.log("Container card " + container + " exists.");
@@ -200,17 +203,8 @@
                             console.log(snapshot.val());
                             // Read data for every device object
                             snapshot.forEach(function(childSnapshot) {
-                                var deviceID = childSnapshot.key;
-                                console.log("Device ID: " + deviceID);
-                                // childData contains battery data
                                 var deviceData = childSnapshot.val();
-                                console.log("Device name: " + deviceData.batteryDeviceCustomName)
-                                console.log("Battery Level: " + deviceData.batteryLevel);
-                                // Adding letter to div ID - Progressbar.js can't recognize elements IDs starting with numerals
-                                // (valid in HTML, not valid in CSS syntax)
-                                container = 'd' + deviceID;
-                                console.log("Container: " + container);
-                                showBatteryCard(container, deviceData);
+                                showBatteryCard(deviceData);
                             });
                         },
                         function (errorObject) {
@@ -218,17 +212,8 @@
                         }
                 );
                 ref.on('child_changed', function(childSnapshot) {
-                    var deviceID = childSnapshot.key;
-                    console.log("Device ID: " + deviceID);
-                    // childData contains battery data
                     var deviceData = childSnapshot.val();
-                    console.log("Device name: " + deviceData.batteryDeviceCustomName)
-                    console.log("Battery Level: " + deviceData.batteryLevel);
-                    // Adding letter to div ID - Progressbar.js can't recognize elements IDs starting with numerals
-                    // (valid in HTML, not valid in CSS syntax)
-                    container = 'd' + deviceID;
-                    console.log("Container: " + container);
-                    showBatteryCard(container, deviceData);
+                    showBatteryCard(deviceData);
                 });
             } else {
                 console.log("Not logged in.");
