@@ -215,6 +215,10 @@
                     var deviceData = childSnapshot.val();
                     showBatteryCard(deviceData);
                 });
+                ref.on('child_added', function(childSnapshot) {
+                    var deviceData = childSnapshot.val();
+                    showBatteryCard(deviceData);
+                });
             } else {
                 console.log("Not logged in.");
             }
