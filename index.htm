@@ -194,6 +194,13 @@
             $('#time-of-check-' + container).fadeIn(1600);
         }
 
+        function removebatteryCard(deviceData) {
+            var container = 'd' + deviceData.batteryDeviceId;
+            if ($('#card-' + container).length) {
+                $('#card-' + container).remove();
+                console.log("Container card " + container + " remove.");
+        }
+
         function showBatteries() {
             var user = firebase.auth().currentUser;
             if (user != null) {
@@ -218,6 +225,10 @@
                 ref.on('child_added', function(childSnapshot) {
                     var deviceData = childSnapshot.val();
                     showBatteryCard(deviceData);
+                });
+                ref.on('child_removed', function(childSnapshot) {
+                    var deviceData = childSnapshot.val();
+                    removeBatteryCard(deviceData);
                 });
             } else {
                 console.log("Not logged in.");
