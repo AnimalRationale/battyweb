@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.orange-indigo.min.css">
     <script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
     <link rel="stylesheet" href="css/style.css">
-    <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.2.1/firebase.js"></script>
     <script src="js/progressbar.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
 </head>
@@ -194,11 +194,12 @@
             $('#time-of-check-' + container).fadeIn(1600);
         }
 
-        function removebatteryCard(deviceData) {
+        function removeBatteryCard(deviceData) {
             var container = 'd' + deviceData.batteryDeviceId;
             if ($('#card-' + container).length) {
                 $('#card-' + container).remove();
                 console.log("Container card " + container + " remove.");
+            }
         }
 
         function showBatteries() {
