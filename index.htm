@@ -264,6 +264,7 @@
             // Sign out of Firebase.
             console.log("SignOut triggered.")
             firebase.auth().signOut();
+            $('#cards').empty();
         }
 
         // Initialize Firebase
